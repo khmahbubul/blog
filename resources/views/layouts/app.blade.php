@@ -10,8 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -19,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -73,13 +73,18 @@
 
         <main class="py-4">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="{{ url('/home') }}">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url('/post/create') }}">Create new post</a></li>
-                        </ul>
-                    </div>
+                <div class="row justify-content-center">
+                    @if(Auth::check())
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item"><a href="{{ url('/home') }}">Home</a></li>
+                                <li class="list-group-item"><a href="{{ route('category.index') }}">View categories</a></li>
+                                <li class="list-group-item"><a href="{{ route('category.create') }}">Create new category</a></li>
+                                <li class="list-group-item"><a href="{{ route('post.create') }}">Create new post</a></li>
+                            </ul>
+                        </div>
+                    @endif
+
                     <div class="col-lg-8">
                         @yield('content')
                     </div>
@@ -87,5 +92,16 @@
             </div>
         </main>
     </div>
+
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
+    <script>
+        @if(Session::has('success'))
+            toastr.success("{{ Session::get('success') }}");
+        @endif
+    </script>
 </body>
 </html>

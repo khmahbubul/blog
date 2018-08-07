@@ -19,6 +19,16 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/post/create', 'PostsController@create');
+Route::middleware('auth')->prefix('admin')->group(function() {
 
-Route::post('/post/store', 'PostsController@store');
+	Route::get('/category/index', 'CategoriesController@index')->name('category.index');
+	Route::get('/category/edit/{id}', 'CategoriesController@edit')->name('category.edit')->where(['id' => '[0-9]+']);
+	Route::get('/category/delete/{id}', 'CategoriesController@destroy')->name('category.delete')->where(['id' => '[0-9]+']);
+	Route::get('/category/create', 'CategoriesController@create')->name('category.create');
+	Route::post('/category/store', 'CategoriesController@store')->name('category.store');
+	Route::post('/category/update/{id}', 'CategoriesController@update')->name('category.update')->where(['id' => '[0-9]+']);
+
+	Route::get('/post/create', 'PostsController@create')->name('post.create');
+	Route::post('/post/store', 'PostsController@store')->name('post.store');
+	
+});
